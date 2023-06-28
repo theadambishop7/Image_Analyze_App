@@ -1,0 +1,97 @@
+{% with messages = get_flashed_messages() %}
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
+<style>
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #198754; /* Green */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+<div class="px-4 pt-5 mt-5 text-center">
+    <img class="d-block mx-auto mb-4" src="/static/image_placeholder.png" alt="" height="57">
+    <h1 class="display-5 fw-bold text-body-emphasis">Upload your image</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">Introducing a unique tool for image analysis. This app effortlessly identifies and ranks the top 10 colors present in your uploaded images. Gain insights into your visual content and enrich your understanding of color distribution with just a few taps.</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <form method="post" enctype="multipart/form-data" action="{{ url_for('analyze') }}">
+            <Label for="file">File</Label>
+            <input id="file" name="file" type="file" />
+              <button id="upload-button" type="submit" class="btn btn-outline-success btn-sm px-4 gap-3 fs-6">Upload</button>
+          </form>
+      </div>
+        {% for message in messages %}
+        {% if message != 'analysis_ready' %}
+        <p class="text-danger">{{ message }}</p>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div id="loader" class="container px-4 d-flex align-items-center justify-content-center" style="display: none !important;">
+    <p class="loader"></p>
+</div>
+{% for message in messages %}
+{% if message == 'analysis_ready' %}
+<div class="container px-0 py-4">
+    <img class="d-block mx-auto" src="{{ image }}" style="max-width:800px!important;max-height:400px!important;" />
+</div>
+
+<div class="container">
+    <div class="row">
+      <div class="col colored" style="background-color: {{ color.color1_hex }}; height: 150px;">{{ '%.2f'|format(color.color1_percent*100) }}%<br>rgb({{ color.color1_rgb[0]|int }}, {{ color.color1_rgb[1]|int }}, {{ color.color1_rgb[2]|int }})<br>{{ color.color1_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color2_hex }}; height: 150px;">{{ '%.2f'|format(color.color2_percent*100) }}%<br>rgb({{ color.color2_rgb[0]|int }}, {{ color.color2_rgb[1]|int }}, {{ color.color2_rgb[2]|int }})<br>{{ color.color2_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color3_hex }}; height: 150px;">{{ '%.2f'|format(color.color3_percent*100) }}%<br>rgb({{ color.color3_rgb[0]|int }}, {{ color.color3_rgb[1]|int }}, {{ color.color3_rgb[2]|int }})<br>{{ color.color3_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color4_hex }}; height: 150px;">{{ '%.2f'|format(color.color4_percent*100) }}%<br>rgb({{ color.color4_rgb[0]|int }}, {{ color.color4_rgb[1]|int }}, {{ color.color4_rgb[2]|int }})<br>{{ color.color4_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color5_hex }}; height: 150px;">{{ '%.2f'|format(color.color5_percent*100) }}%<br>rgb({{ color.color5_rgb[0]|int }}, {{ color.color5_rgb[1]|int }}, {{ color.color5_rgb[2]|int }})<br>{{ color.color5_hex }}</div>
+    </div>
+    <div class="row">
+      <div class="col colored" style="background-color: {{ color.color6_hex }}; height: 150px;">{{ '%.2f'|format(color.color6_percent*100) }}%<br>rgb({{ color.color6_rgb[0]|int }}, {{ color.color6_rgb[1]|int }}, {{ color.color6_rgb[2]|int }})<br>{{ color.color6_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color7_hex }}; height: 150px;">{{ '%.2f'|format(color.color7_percent*100) }}%<br>rgb({{ color.color7_rgb[0]|int }}, {{ color.color7_rgb[1]|int }}, {{ color.color7_rgb[2]|int }})<br>{{ color.color7_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color8_hex }}; height: 150px;">{{ '%.2f'|format(color.color8_percent*100) }}%<br>rgb({{ color.color8_rgb[0]|int }}, {{ color.color8_rgb[1]|int }}, {{ color.color8_rgb[2]|int }})<br>{{ color.color8_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color9_hex }}; height: 150px;">{{ '%.2f'|format(color.color9_percent*100) }}%<br>rgb({{ color.color9_rgb[0]|int }}, {{ color.color9_rgb[1]|int }}, {{ color.color9_rgb[2]|int }})<br>{{ color.color9_hex }}</div>
+      <div class="col colored" style="background-color: {{ color.color10_hex }}; height: 150px;">{{ '%.2f'|format(color.color10_percent*100) }}%<br>rgb({{ color.color10_rgb[0]|int }}, {{ color.color10_rgb[1]|int }}, {{ color.color10_rgb[2]|int }})<br>{{ color.color10_hex }}</div>
+    </div>
+  </div>
+
+
+{% endif %}
+{% endfor %}
+{% endwith %}
+<script>
+document.getElementById('upload-button').onclick = function() {
+    document.getElementById('loader').style.display = 'block';
+};
+</script>
+<script>
+    // Get all elements with the class 'colored'
+    var coloredElements = document.getElementsByClassName('colored');
+
+    // Loop over each element
+    for (var i = 0; i < coloredElements.length; i++) {
+      var element = coloredElements[i];
+
+      // Get the background color of the element
+      var bgColor = getComputedStyle(element).backgroundColor;
+
+      // Use tinycolor to get a readable color for that background color
+      var textColor = tinycolor.mostReadable(bgColor, ['black', 'white']);
+
+      // Set the color of the text in the element to the readable color
+      element.style.color = textColor;
+    }
+  </script>
+</body>
+
