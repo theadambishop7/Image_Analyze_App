@@ -60,7 +60,7 @@ def rgb2hex(rgb):
 def analyze_colors(file):
     global color_analysis
     image = Image.open(file)
-    image = image.resize((50, 50))  # Reduce computation
+    image = image.resize((500, 500))  # Reduce computation
     image_np = np.array(image)  # Convert image to numpy array
     image_np = image_np.reshape((-1, 3))  # Reshape to fit KMeans input
 
